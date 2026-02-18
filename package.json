@@ -1,0 +1,37 @@
+{
+  "name": "book_api",
+  "version": "1.0.0",
+  "description": "Book listing",
+  "main": "dist/server.js",
+  "author": "Daryl Seguritan",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "node-cache": "^5.1.2",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "dev": "nodemon --watch src --exec tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.2.3",
+    "@types/supertest": "^6.0.3",
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
