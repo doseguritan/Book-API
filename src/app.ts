@@ -3,6 +3,7 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import { cacheMiddleware } from './middlewares/cache.js';
+import cors from 'cors';
 import bookRouter from './routes/book.js';
 
 const app = express();
@@ -10,6 +11,7 @@ const app = express();
 app.use(cacheMiddleware);
 app.use(express.json());
 app.use(cookieParser())
+app.use(cors())
 // Routes - /api/books
 app.use("/api/books", bookRouter);
 
