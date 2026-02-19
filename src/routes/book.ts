@@ -5,18 +5,51 @@ import type { Book, BookResponse, FavoriteBook } from '../types/book.js';
 import { db } from '../database/connect.js';
 import { getVisitorID } from '../helpers/visitor.js';
 import { cache } from '../middlewares/cache.js';
+import { fetchSearchQueryString, saveSearchQueryString } from 'src/database/transactions/search.js';
+import type { Search } from 'src/types/search.js';
 
 export const GUTENDEX_API_URL = `${process.env.BOOK_API_URL}/books`;
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const query = new URLSearchParams(req.query as Record<string, string>).toString();
-    const response = await fetch(`${GUTENDEX_API_URL}?${query}`);
+    const visitorID:string = getVisitorID(req, res);
+    const query = new URLSearchParams(req.query as Record<string, string>)
+    const query_val = query.get('search') || false
+
+    if(query_val)
+      await saveSearchQueryString(visitorID, query_val);
+
+    const queryStr = query.toString();
+    const response = await fetch(`${GUTENDEX_API_URL}?${queryStr}`);
     const data: BookResponse = await response.json();
+
     res.json({data});
   } catch (error) {
     console.error('Error fetching books:', error);
     res.sendStatus(500).json({ error: 'Failed to fetch books' });
+  }
+});
+
+router.get('/top-10', async (req: Request, res: Response) => {
+  try {
+    const response = await fetch(`${GUTENDEX_API_URL}`);
+    const data: BookResponse = await response.json();
+    
+    res.json({data: data?.results?.slice(0, 10)});
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    res.sendStatus(500).json({ error: 'Failed to fetch books' });
+  }
+});
+
+router.get('/searches', async (req: Request, res: Response) => {
+  try {
+    const visitorID:string = getVisitorID(req, res);
+    const fetchSearches =  await fetchSearchQueryString(visitorID);
+    res.json({data: fetchSearches})
+  } catch (error) {
+    console.error('Error fetching favorite books:', error);
+    res.status(500).json({ error: 'Failed to fetch searches' });
   }
 });
 
@@ -63,7 +96,7 @@ const fetchBookByID = async (book_id: string): Promise<Book> => {
   return data;
 }
 
-router.post('/favorite/:id', async (req: Request, res: Response) => {
+router.post('/favorites/:id', async (req: Request, res: Response) => {
   const to_remove = 'remove' in req.query;
   const query: string = to_remove
     ? 'DELETE FROM favorites WHERE visitor_id = ? AND book_id = ?' 

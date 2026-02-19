@@ -4,7 +4,7 @@ import { db } from '../connect.js';
 export async function addFavorite(visitorID: string, bookID: string): Promise<void> {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO favorites (visitor_id, book_id) VALUES (?, ?)', 
+      'INSERT INTO favorites (visitor_id, book_id) VALUES (?, ?) ON CONFLICT (visitor_id, book_id) DO NOTHING', 
       [visitorID, bookID],
       (err) => {
         if (err) {
