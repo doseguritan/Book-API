@@ -5,7 +5,7 @@ import type { Book, BookResponse, FavoriteBook } from '../types/book.js';
 import { db } from '../database/connect.js';
 import { getVisitorID } from '../helpers/visitor.js';
 import { cache } from '../middlewares/cache.js';
-import { fetchSearchQueryString, saveSearchQueryString } from 'src/database/transactions/search.js';
+import { fetchSearchQueryString, saveSearchQueryString } from '../database/transactions/search.js';
 
 export const GUTENDEX_API_URL = `${process.env.BOOK_API_URL}/books`;
 
