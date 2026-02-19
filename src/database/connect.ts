@@ -1,11 +1,7 @@
-import path from 'node:path';
 import sqlite3 from 'sqlite3';
 
-const  __dirname = path.dirname(new URL(import.meta.url).pathname);
-const db_path = path.join(__dirname, 'book.sqlite');
-
 const sql3 = sqlite3.verbose();
-export const db = new sql3.Database(db_path, sqlite3.OPEN_READWRITE, (err) => {
+export const db = new sql3.Database(":memory:", sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error('Error opening database:', err);
     return;
