@@ -1,0 +1,7 @@
+apis
+/api/books
+/api/books/:id
+/api/books/favorites
+/api/books/favorites/:id
+/api/books/favorites/searches
+/api/books/top-10
